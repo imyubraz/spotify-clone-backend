@@ -73,14 +73,30 @@ const morgan = require("morgan");
     // using morgan
 app.use(morgan('tiny'));
 
+app.use(express.json())
+    // use to send response in json format
+
+//Importing Routes
+// const authRoute = require("./routes/auth");
+
+// Using routes in app
+// app.use("/api/auth", authRoute);
+
 // API (GET Request)
-app.get("/", (req, res, next)=>{
+
+ app.get("/", (req, res, next)=>{
     res.send("Hello world!")
 })
 
 app.get("/test", (req, res, next)=>{
     res.send("Testing !")
-})
+}) 
+
+
+// API Routes
+// app.use("/api/auth", require("./routes/auth"));
+
+
 // first parameter : req (or any relevant name) => store request object (consists request related data)
 // second parameter : res (or any relevant name) => store request object (consists request related data)
 // third parameter : next (or any relevant name) -> optional used in middlewares chaining by calling function (next() or given_name())
