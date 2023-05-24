@@ -32,6 +32,39 @@ mongoose
     console.log(`Error occured while connecting to MongoDB!`);
 });
 
+// Models
+const User = require("./models/User");
+
+// passport & password-jwt initial setup
+const passport = require("passport");
+
+let JwtStrategy = require('passport-jwt').Strategy,
+    ExtractJwt = require('passport-jwt').ExtractJwt;
+let opts = {}
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+// opts.secretOrKey = 'Anything';
+opts.secretOrKey = `${process.env.JWT_SECRET_KEY}`;
+opts.issuer = 'accounts.examplesoft.com';
+opts.audience = 'yoursite.net';
+passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
+    // finding user from User model (import or require model first)
+    User.findOne({id: jwt_payload.sub}, function(err, user) {
+        // error case
+        if (err) {
+            return done(err, false);
+        }
+        // user exists case
+        if (user) {
+            return done(null, user);
+        }
+        // user doesn't exist case
+        else {
+            return done(null, false);
+            // or you could create a new account
+        }
+    });
+}));
+
 // morgan (to track hitted endpoint in console)
 const morgan = require("morgan");
 
