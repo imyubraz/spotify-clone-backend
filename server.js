@@ -4,9 +4,21 @@ const express = require("express");
 // express app
 const app = express();
 
+// morgan (to track hitted endpoint in console)
+const morgan = require("morgan");
+
+// using middlewares
+
+    // using morgan
+app.use(morgan('tiny'));
+
 // API (GET Request)
 app.get("/", (req, res, next)=>{
     res.send("Hello world!")
+})
+
+app.get("/test", (req, res, next)=>{
+    res.send("Testing !")
 })
 // first parameter : req (or any relevant name) => store request object (consists request related data)
 // second parameter : res (or any relevant name) => store request object (consists request related data)
