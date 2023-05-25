@@ -4,18 +4,24 @@ const express = require("express");
 // express app
 const app = express();
 
-// dotenv configuration (to use environment variables stored in /.env file)
+// dotenv configuration (to use environment variables stored in /.env file) {
+
 const dotenv = require("dotenv");
 dotenv.config();
-// console.log(process.env);
+    // console.log(process.env);
 
-// connect to mongodb
+// } dotenv configuration
 
-// requiring mongoose
+// connect to mongodb {
+
+    // requiring mongoose
 const mongoose = require("mongoose");
 
-// connect
+    // connect syntax
 // mongoose.connect(<URI>, <OPTIONS>); //return promise
+
+
+    // connecting mongodb {
 
 // const MONGODB_URI = `mongodb+srv://<username>:<password>@mycluster.uecf9bg.mongodb.net/?retryWrites=true&w=majority`;
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -32,10 +38,20 @@ mongoose
     console.log(`Error occured while connecting to MongoDB!`);
 });
 
-// Models
+    // } connecting mongodb 
+
+// } connect to mongodb 
+
+// Models {
+
 const User = require("./models/User");
 
-// passport & password-jwt initial setup
+// } Models 
+
+// passport & password-jwt {
+
+    // passport & password-jwt initial setup {
+
 const passport = require("passport");
 
 let JwtStrategy = require('passport-jwt').Strategy,
@@ -65,48 +81,77 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     });
 }));
 
-// morgan (to track hitted endpoint in console)
+    // } passport & password-jwt initial setup 
+
+// }  passport & password-jwt
+
+
+
+// using middlewares {
+
+    // morgan (to track hitted endpoint in console) {
+
+        // Requiring morgan
 const morgan = require("morgan");
-
-// using middlewares
-
-    // using morgan
+        // using morgan
 app.use(morgan('tiny'));
 
+    // } morgan
+
+    // using express.json (to parse req.body in json & to send response in json format)
 app.use(express.json())
-    // use to send response in json format
 
-//Importing Routes
-// const authRoute = require("./routes/auth");
+// } using middlewares
 
-// Using routes in app
-// app.use("/api/auth", authRoute);
 
-// API (GET Request)
+// APIs / Endpoints / Routes
 
- app.get("/", (req, res, next)=>{
+    // '/' endpoint (GET Request) {
+
+app.get("/", (req, res, next)=>{
     res.send("Hello world!")
 })
 
+/*
+first parameter : req (or any relevant name) => store request object (consists request related data)/*
+second parameter : res (or any relevant name) => store request object (consists request related data)/*
+third parameter : next (or any relevant name) -> optional used in middlewares chaining by calling function (next() or given_name())
+*/
+
+    // } '/' endpoint (GET Request)
+    
+    // '/ test' endpoint (GET Request) {
 app.get("/test", (req, res, next)=>{
     res.send("Testing !")
 }) 
+    // } '/ test' endpoint (GET Request)
 
+    // Importing Routes (all api routes / endpoints which are additional routes in seperate file) {
 
-// API Routes
+const authRoutes = require("./routes/auth");
+
+    // } Importing Routes
+
+    // Using routes in app (additional routes in seperate file) {
+
+app.use("/api/auth", authRoutes);
 // app.use("/api/auth", require("./routes/auth"));
 
-
-// first parameter : req (or any relevant name) => store request object (consists request related data)
-// second parameter : res (or any relevant name) => store request object (consists request related data)
-// third parameter : next (or any relevant name) -> optional used in middlewares chaining by calling function (next() or given_name())
+    // } Using routes in app
 
 
-// Running server on certain port
-const PORT = 8000;
+// } APIs / Endpoints / Routes
 
-app.listen(PORT, ()=>{
-    console.log(`App is running on port ${PORT}.`);
-})
+// Running server on certain port {
+    
+    const PORT = 8000;
+    
+    app.listen(PORT, ()=>{
+        console.log(`App is running on port ${PORT}.`);
+    })
 
-// After running server.js using node js > node server.js . Express app will start listening to certain port and give response as per defined APIs
+    /* 
+    After running server.js using node js > node server.js . Express app will start listening to certain port and give response as per defined APIs
+    */
+
+// } Running server on certain port

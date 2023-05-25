@@ -1,7 +1,13 @@
-// 1: Requiring mongoose
+// Imports {
+
+    // 1: Requiring mongoose 
 const mongoose = require("mongoose");
 
-// 2: Create a model schema using mongoose
+// } Imports
+
+
+// 2: Create a model schema using mongoose {
+
 const userSchema = new mongoose.Schema({
     firstName:{
         type: String,
@@ -33,12 +39,22 @@ const userSchema = new mongoose.Schema({
     }
 })
 
-// 3: Create a model as per schema defined
+// } 2: Create a model schema using mongoose
+
+
+// 3: Create a model as per schema defined {
+
 const userModel = mongoose.model("user", userSchema);
 /*
 First argument : user => collection name in mongodb
 second argument : userSchema (schema to be followed to create collection)
 */
 
-// 4: Exporting model
-module.exports = userModel;
+// } 3: Create a model as per schema defined
+
+// Exports {
+
+    // 4: Exporting model
+module.exports = userModel
+
+// } Exports
