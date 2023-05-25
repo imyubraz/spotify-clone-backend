@@ -33,7 +33,7 @@ const {getToken} = require("../utils/helpers")
 
 // } helpers
 
-// /register endoiint
+// /register endpoiint {
 
     // POST request on /register endpoint
 router.post("/register", async (req, res) => {
@@ -148,6 +148,113 @@ router.post("/register", async (req, res) => {
     // } sending response
 
 });
+
+// } /register endpoiint
+
+// /login endpoint {
+
+/* 
+Login api:
+1: Get email or username and password sent by user from req.body
+2: Check if a user with the given email or username exists.
+3: If user exists check if the password is correct ?
+4: If password is also correct return a token to user
+ */
+
+router.post("/login", async (req, res)=>{
+
+    // Destructuring email and password from req.body object
+    const {email, password} = req.body;
+
+    // check user with the email exists ? {
+    
+    const user = await User.findOne({email: email});
+
+    // const userWithEmail = await User.findOne({email: email});
+    // console.log(userWithEmail);
+
+    // const userWithUsername = await User.findOne({username: email}); 
+    // console.log(userWithEmail.username);
+
+    /*
+    if (!(userWithEmail || userWithUsername)){
+        return res.status(404).json({
+            success: false,
+            error: true,
+            // message: "Email is not registered yet!" // for security reason we wont send this message
+            // message: "Invalid email or password!" // for email & password fields
+            message: "Invalid credentials!" // for email or username & password fields
+        })
+    }
+    */
+    
+        // user not found case
+    if(!user){
+        return res.status(404).json({
+            success: false,
+            error: true,
+            // message: "Email is not registered yet!" // for security reason we wont send this message
+            message: "Invalid email or password!"
+        })
+    }
+
+    console.log(1, {...user});
+
+    console.log(2, {...user._doc});
+    console.log(3, user.toJSON());
+    
+    // } check user with the email exists ?
+
+    // check for password {
+
+        // syntax
+    // const isPasswordValid = bcrypt.compare(<plain_password> , <hashed_password>)
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    
+    // } check for password
+
+    // password invalid case {
+    
+    if (!isPasswordValid){
+        return res.status(403).json({
+            success: false,
+            error: true,
+            message: "Invalid email or password!"
+        })
+    }
+    
+    // } password invalid case
+
+    // password valid case {
+    
+    // const temp = {...user._doc}
+    // console.log(temp);
+
+    // const payload = user.toJSON();
+    // const payload = {...user._doc};
+    const token = await getToken(user);
+
+
+    // const userToReturn = {...user._doc, token}
+    const userToReturn = {...user._doc}
+    delete userToReturn.password
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged in successfully!",
+        data: {
+            user: userToReturn,
+            token
+        }
+    })
+
+    // } password valid case
+
+})
+
+// } /login endpoint
+
 
 // exports{
 
